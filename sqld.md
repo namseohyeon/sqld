@@ -180,3 +180,159 @@ ORDER BY 칼럼이나 표현식 #6
     - END 사용가능
 - NON EQUI JOIN # 값 일치 안할때
     - between, >,>=,<,<= 사용
+
+#### from 절 join형태
+-inner join
+    - inner join은 default 옵션으로 join 조건에서 동일한 값이 있는 행만 반환
+    - 생략 가능
+    - but cross, outer join은 같이 사용x
+    - where절에서 사용하던 join조건을 from절에서 정의하겠다는 표시이므로 using 조건절이나 on 조건절 필수적으로 사용
+    ```
+    #where절 join 조건
+    select emp,deptno,empno,ename,dname
+    from emp, dept
+    where emp.deptno = dept.deptno
+
+    #from절 join 조건
+    select emp.depno,empno,ename,dname
+    from emp inner join dept
+    on emp.deptno = dept.deptno
+
+    #inner 키워드 생략
+    select emp.depno,empno,ename,dname
+    from emp join dept
+    on emp.deptno = dept.deptno
+    ```
+- natural join
+    - 두 테이블 간의 동일한 이름을 갖는 모든 칼럼들에 대해 EQUI JOIN수행
+    - NATURAL JOIN이 명시되었으면, 추가로 using절, on절, where절에서 join조건을 정의할 수 없음
+    ```
+    #from절 join조건
+    select절 join 조건
+    select deptno, empno, ename, dname
+    from emp natural join dept
+    ```
+    - 두개의 테이블에서 deptno라는 공통된 칼럼을 자동으로 인식
+    - join에 사용된 칼럼들은 같은 데이터 유형이여야함
+    - alias나 테이블명 같은 접두사 붙일 수 없음
+- using 조건절
+    - 같은 이름을 가진 칼럼들 중에서 원하는 칼럼에 대해서만 선택적으로 EQUI JOIN 가능
+    ```
+    from 절 join 조건
+    select depto, dname, dept.loc
+    from dept join dept_temp
+    using (deptno,dname)
+    ```
+    - join에 사용된 칼럼들은 같은 데이터 유형이여야함
+    - alias나 테이블명 같은 접두사 붙일 수 없음
+- ON 조건절
+    - on조건절과 where조건절을 분리하여 이해가 쉬우며, 칼럼명이 다르더라도 join조건 사용 가능
+    ```
+    #from 절 join 조건
+    select e.empno, e.ename, e.deptno, d.dname
+    from emp p  join dept d
+    on (e.deptno = d.deptno)
+    ```
+    - 임의의 join조건을 지정하거나, 이름이 다른 칼럼명을 join조건으로 사용하나 join 칼럼을 명시하기는 위해서는 on조건절 사용
+    - where검색 조건은 충돌없이 사용가능
+    - where절의 join조건과 같은 기능을 하면서도, 명시적으로 ,join조건을 구분할 수 있음
+- CROSS JOIN
+    - 일반 집합 연산자의 product의 개념으로 테이블 간 join조건이 없는 경우 생길 수 있는 모든 데이터의 조합
+    - M*N의 데이터 조합 발생
+- OUTER JOIN
+    - 동일한 값이 없는 행도 반환할 때 사용 가능
+    - (+)
+    - using조건절이나 on조건절을 필수적으로 사용해야함
+    - LEFT OUTER JOIN 
+        - 조인 조건 값이 없는 경우에는 우측 테이블에서 가져오는 칼럼들을 NULL값
+        - OUTER 키워드 생략가능
+        ```
+        select 
+        from a LEFT OUTER JOIN b
+        on a.c = b.d
+        order by c 
+        ```
+    - RIGHT OUTER JOIN
+        - 좌측 테이블에서 JOIN 대상 데이터를 읽어옴
+        - 좌측 테이블의 JOIN 칼럼에서 조인 조건 값이 없는 경우에는 좌측테이블에서 가져오는 컬럼들을 NULL로 바꿈
+        - OUTER 키워드 생략 가능
+        ```
+        select 
+        from a RIGHT OUTER JOIN b
+        on a.c = b.d
+        ```
+    - FULL OUTER JOIN
+        - 조인 수행시, 좌측, 우측 테이블의 모든 데이터를 읽어 join하여 결과 생성
+        - UNION 기능과 같으므로 중복 데이터는 삭제
+        - OUTER 키워드 생략 가능
+        ```
+        select *
+        from a FULL OUTER JOIN b
+        on a.c = b.d
+        ```
+### 집합연산자
+- select절 컬럼수가 동일하고 select절의 동일 위치에 존재하는 칼럼의 데이터 타입이 상호호환 가능 해야함
+- in, or연산자로 변환 가능 > 표시순서 달라질 수 있음 > order by 절 사용
+- UNION
+```
+s
+f
+w
+UNION 
+s
+f
+w
+```
+- UNION ALL
+```
+s
+f
+w
+UNION ALL
+s
+f
+w
+```
+- INTERSECT
+- AND연산자, IN 서브쿼리, EXISTS로 변환 가능
+```
+s
+f
+w
+INTERSECT
+s
+f
+w
+```
+- except(MINUS)
+- MINUS 연산자를 사용하지 않고, 논리 연산자를 이용가능
+```
+s
+f
+w a = '' AND 칼럼명 <> 'MF'
+```
+- NOT EXISTS, NOT IN 서브쿼리를 이용가능
+<table>
+<tr><td>집합 연산자</td><td>연산자의 의미</td></tr>
+<tr><td>UNION</td><td>합집합으로 결과에서 모든 중복된 행은 하나의 행으로</td></tr>
+<tr><td>UNION ALL</td><td>합집합 중복포함</td></tr>
+<tr><td>INTERSECT</td><td>교집합/ 중복된 행은 하나의 행으로 만듬</td></tr>
+<tr><td>EXCEPT(MINUS)</td><td>차집합/ 중복된 행은 하나의 행으로 만듬</td></tr>
+</table>
+
+### 계층형 질의와 셀프 조인
+- 계층형 질의
+```
+s
+f
+w
+START WITH 조건 #ROOT 시작위치 지정 구문
+CONNECT BY PRIOR #다음에 전개될 자식 데이터를 지정하는 구문
+#자식 데이터는 주어진 조건 만족 
+# PRIOR 자식 = 부모 형태로 사용되면 계층구조에서 부모>자식방향으로 내려가는 순방향
+# PRIOR 부모 =자식 형태로 사용되면 계층구조에서 자식>부모 방향으로 올라가는 역방향으로 전개
+```
+- 셀프조인
+- 동일 테이블의 조인
+- 테이블과 칼럼 이름 동일하기 때문에 식별을 위해 반드시 테이블 별칭 사용
+- 개념적으로는 다른 테이블 사용
