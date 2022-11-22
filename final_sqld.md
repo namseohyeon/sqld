@@ -1,6 +1,8 @@
 ## workbook C
 1. 다이어그램<br>
 ![image](https://user-images.githubusercontent.com/64974683/203309946-50c6a42a-c3af-4ca5-b445-3b953462f5ab.png)
+![image](https://user-images.githubusercontent.com/64974683/203310434-1dd7cffc-ebd0-4ab9-bf4c-d7dd1776c56c.png)
+
 - 실선은 부모 테이블의 기본키를 자식 테이블이 가지고 있으며, 이를 기본키로 사용하는 경우
 - 점선은 부모 테이블의 기본키를 자식 테이블이 가지고 있지만, 이를 기본키로 사용하지 않는 
 
