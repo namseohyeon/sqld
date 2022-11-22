@@ -17,7 +17,7 @@ create table Doctors(
 ALTER TABLE Doctors
     ADD CONSTRAINT doc_id PRIMARY KEY(doc_id);
 ```
-<br>
+
 ```
 create table nurses(
     nur_id number(10) NOT NULL,
@@ -31,6 +31,7 @@ create table nurses(
 alter table nurses
     ADD CONSTRAINT nur_id PRIMARY KEY (nur_id);
 ```
+
 ```
 create table treatments(
     treat_id number(15) NOT NULL,
@@ -47,7 +48,9 @@ ALTER table treatments
 Alter table treatments
     ADD (CONSTRINT R_6 FOREIGN KEY (doc_id) REFERENCES Doctors (doc_id));
 ```
+
 3. 데이터 입력
+
 ```
 INSERT INTO Doctors
     values (070576, '피부과', '홍길동', 'M', '016-333-7263,'lJa@hanbh.com','전문의')
