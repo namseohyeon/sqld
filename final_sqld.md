@@ -218,11 +218,15 @@ order by avg(salary) desc;
 
 5. 여러 테이블의 데이터 표시
 - 조인
-    - 동등조인 : 양쪽 테이블의 공통 칼럼을 기준으로 같은 행 연결
-    - 비동등 조인: 양쪽 테이블의 공통 칼럼을 기준으로 동등이 아닌 조건으로 연결
-    - 셀프 조인: 하나의 테이블에 공통된 칼럼이 두 개 이상 있는 경우의 동등조인
-    - 외부 조인: 동등 조인에서 누락된 양쪽 테이블 정보를 출력하기 위한 조인으로 LEFT, RIGHT, FULL OUTER JOIN이 있음
-    - 자연 조인: 양쪽 테이블에서 데이터 타입 및 컬럼명이 같은 값이 존재할 때 자동으로 동등 조인 수행
+    - 동등조인(inner join/내부조인) : 양쪽 테이블의 공통 칼럼을 기준으로 같은 행 연결
+    - 비동등 조인: 양쪽 테이블의 공통 칼럼을 기준으로 동등이 아닌 조건으로 연결 + 테이블의 어떤 컬럼도 join 할 테이블의 컬럼에 일치하지 않을 때 사용하고 조인 조건은 동등(=) 이외의 연산자들을 갖음 (equal이 아닌 연산자 모두) (between and, is null, is not null, in, not in)
+    - 셀프 조인: 하나의 테이블에 공통된 칼럼이 존재하는 경우의 동등조인
+    - 외부 조인: 동등 조인에서 누락된 양쪽 테이블 정보를 출력하기 위한 조인으로 LEFT(왼쪽 다쓰기, 오른쪽에 왼쪽 컬럼이 없으면 null), RIGHT, FULL OUTER JOIN(양쪽 다 사용, 없으면 null)이 있음
+    - 자연 조인(동등조인에서 조인에 참여한 속성이 두 번 나오지 않도록 중복된 속성(두 번째 속성)을 제거): 양쪽 테이블에서 데이터 타입 및 컬럼명이 같은 값이 존재할 때 자동으로 동등 조인 수행
+    - using절 : 두 개 이상의 공통 칼럼이 존재할 경우 하나의 컬럼만 동등조인 하도록 지정해주는 절
+![image](https://user-images.githubusercontent.com/64974683/203335455-8ea424d3-e3a0-4295-9402-ec72e6012110.png)
+![image](https://user-images.githubusercontent.com/64974683/203335484-d8c0dfc9-a385-4e59-beed-16e8f03121f3.png)
+
 ```
 <!-- --A.5-1 -->
 select d.department_name, count(e.employee_id)
@@ -286,3 +290,4 @@ select first_name||' '||last_name "Name",
 from employees e
 order by job_id desc;
 ```
+
